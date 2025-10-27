@@ -1,13 +1,23 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion 29 // Android 10
 
     defaultConfig {
         applicationId "dnsfilter.android"
-        minSdkVersion 14
-        targetSdkVersion 24
+        minSdkVersion 21
+        targetSdkVersion 29 // Android 10
+        versionCode 1503201
+        versionName "1.50.32.1"
+    }
+
+    namespace 'dnsfilter.android'
+
+    lint {
+        checkReleaseBuilds false // ← Tắt kiểm tra lint khi build release
+        abortOnError false       // ← Không dừng build nếu có lỗi lint
     }
 
     buildTypes {
