@@ -50,26 +50,17 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
 
-    # 6. Decode keystore from secret
+    # 6. Decode keystore to app folder
     - name: Decode keystore
-      run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > my-release-key.jks
-#them de kys
+      run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > app/my-release-key.jks
 
+    # 7. Build signed APK using environment variables
+    - name: Build signed APK
       env:
         KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-
-      
-    # 7. Build signed APK
-    - name: Build signed APK
-      run: |
-        ./gradlew clean assembleRelease \
-          -Pandroid.injected.signing.store.file=app/my-release-key.jks \
-          -Pandroid.injected.signing.store.password=${{
-          secrets.KEYSTORE_PASSWORD }} \
-          -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
-          -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+      run: ./gradlew clean assembleRelease
 
     # 8. Upload APK artifact
     - name: Upload APK artifact
